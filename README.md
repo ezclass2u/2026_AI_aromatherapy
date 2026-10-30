@@ -15,7 +15,7 @@
 
 ## GitHub Pages
 
-1. 建立名稱為 `2026_AI芳療活動` 的 GitHub repository。`spec/` 已加入 `.gitignore`，不會納入提交。
+1. 建立 GitHub repository `2026_AI_aromatherapy`。Google 試算表名稱仍為 `2026_AI芳療活動`；`spec/` 已加入 `.gitignore`，不會納入提交。
 2. 將目前資料夾初始化為 Git repository，提交網站與 Apps Script 檔案，並推送到 `main` 分支。
 3. 在 repository 的 **Settings → Pages** 將建置來源設為 **GitHub Actions**。工作流程會部署 `site/`，不會發布規格或 Apps Script 原始碼。
 4. 等待 **Actions** 中的 Pages 工作流程完成，即可從 Pages 設定頁取得網站網址。
