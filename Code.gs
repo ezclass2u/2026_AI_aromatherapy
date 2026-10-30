@@ -89,7 +89,7 @@ function response_(requestId, success) {
     success: success
   }).replace(/</g, '\\u003c');
   const html = '<!doctype html><meta charset="utf-8"><script>' +
-    'window.parent.postMessage(' + payload + ',"*");' +
+    'window.top.postMessage(' + payload + ',"*");' +
     '</script>';
   return HtmlService.createHtmlOutput(html)
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);

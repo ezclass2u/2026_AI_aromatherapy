@@ -390,8 +390,8 @@
       const form = document.querySelector("#registration-form");
       const status = document.querySelector("#form-status");
       const button = document.querySelector("#submit-button");
-      const frame = document.querySelector("#submission-frame");
       let activeRequestId = "";
+      let requestTimeoutId = 0;
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -401,26 +401,39 @@
         }
 
         activeRequestId = window.crypto.randomUUID();
+        const currentRequestId = activeRequestId;
         const requestId = document.createElement("input");
         requestId.type = "hidden";
         requestId.name = "requestId";
-        requestId.value = activeRequestId;
+        requestId.value = currentRequestId;
         form.append(requestId);
         form.action = SCRIPT_URL;
         form.method = "post";
         form.target = "submission-frame";
         button.disabled = true;
         setStatus("報名資料送出中，請稍候…");
+        requestTimeoutId = window.setTimeout(() => {
+          if (activeRequestId !== currentRequestId) return;
+          activeRequestId = "";
+          requestTimeoutId = 0;
+          button.disabled = false;
+          setStatus("尚未收到報名確認，請勿重複送出，並聯絡主辦單位確認。", "error");
+        }, 30000);
         form.submit();
         requestId.remove();
       });
 
       window.addEventListener("message", (event) => {
-        if (event.source !== frame.contentWindow ||
+        const trustedOrigin = event.origin === "https://script.google.com" ||
+          event.origin.endsWith("-script.googleusercontent.com") ||
+          event.origin.endsWith(".script.googleusercontent.com");
+        if (!trustedOrigin ||
             !event.data ||
             event.data.type !== "registration-result" ||
             event.data.requestId !== activeRequestId) return;
 
+        window.clearTimeout(requestTimeoutId);
+        requestTimeoutId = 0;
         button.disabled = false;
         activeRequestId = "";
         if (event.data.success) {
