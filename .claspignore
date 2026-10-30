@@ -1,0 +1,6 @@
+site/**
+spec/**
+.github/**
+.gitignore
+.claspignore
+README.md
